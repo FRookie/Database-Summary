@@ -62,19 +62,19 @@
 
 > 3、事务隔离级别，解决什么并发问题，以及存在什么并发问题
 
->> 1. READ_UNCOMMITTED
+>> 1. READ UNCOMMITTED
 
    >>> 这是事务最低的隔离级别，它充许另外一个事务可以看到这个事务未提交的数据。
 
    >>> 解决第一类丢失更新的问题，但是会出现脏读、不可重复读、第二类丢失更新的问题，幻读 。
   
->> 2. READ_COMMITTED
+>> 2. READ COMMITTED
 
    >>> 保证一个事务修改的数据提交后才能被另外一个事务读取，即另外一个事务不能读取该事务未提交的数据。
 
    >>> 解决第一类丢失更新和脏读的问题，但会出现不可重复读、第二类丢失更新的问题，幻读问题。
   
->> 3. REPEATABLE_READ
+>> 3. REPEATABLE READ
 
    >>> 保证一个事务相同条件下前后两次获取的数据是一致的。 
   
@@ -88,7 +88,7 @@
 
 #### 提醒：
 
-Mysql默认的事务隔离级别为repeatable_read。
+Mysql默认的事务隔离级别为repeatable read,Oracle为read commited。
 
 > 4、MyISAM引擎的锁机制
 
@@ -125,8 +125,9 @@ MyISAM支持并发插入：读的时候插入，但是插入的数据当前事�
 1）共享锁和排他锁都是行锁，意向锁都是表锁，应用中我们只会使用到共享锁和排他锁，意向锁是mysql内部使用的，不需要用户干预。
 
 2）对于UPDATE、DELETE和INSERT语句，InnoDB会自动给涉及数据集加排他锁（X)；对于普通SELECT语句，InnoDB不会加任何锁，事务可以通过以下语句显示给记录集加共享锁或排他锁。
-共享锁（S）：SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE。
-排他锁（X)：SELECT * FROM table_name WHERE ... FOR UPDATE。
+
+     共享锁（S）：SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE。
+     排他锁（X)：SELECT * FROM table_name WHERE ... FOR UPDATE。
 
 3）InnoDB行锁是通过给索引上的索引项加锁来实现的，因此InnoDB这种行锁实现特点意味着：只有通过索引条件检索数据，InnoDB才使用行级锁，否则，InnoDB将使用表锁！。
 
