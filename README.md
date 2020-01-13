@@ -167,3 +167,52 @@ MyISAM支持并发插入：读的时候插入，但是插入的数据当前事�
 > （11） TRUNCATE TABLE 删除表中的所有行，但表结构及其列、约束、索引等保持不变。新行标识所用的计数值重置为该列的种子。如果想保留标识计数值，请改用 DELETE。如果要删除表定义及其数据，请使用 DROP TABLE 语句。 
 
 > （12） 对于由 FOREIGN KEY 约束引用的表，不能使用 TRUNCATE TABLE，而应使用不带 WHERE 子句的 DELETE 语句。由于 TRUNCATE TABLE 不记录在日志中，所以它不能激活触发器。
+
+## 数据库SQL语句执行顺序(应用于索引查询优化)
+
+> + 完整语句
+
+    SELECT 
+    DISTINCT <select_list>
+    FROM <left_table>
+    <join_type> JOIN <right_table>
+    ON <join_condition>
+    WHERE <where_condition>
+    GROUP BY <group_by_list>
+    HAVING <having_condition>
+    ORDER BY <order_by_condition>
+    LIMIT <limit_number>
+ 
+> + 执行顺序
+
+    from →join →on →where →group by→having→select→order by→limit
+    
+> + 各个关键词的作用
+
+    from:需要从哪个数据表检索数据
+    join：联合多表查询返回记录时，并生成一张临时表
+    on：在生成临时表时使用的条件
+    where:过滤表中数据的条件
+    group by:如何将上面过滤出的数据分组
+    having:对上面已经分组的数据进行过滤的条件
+    select:查看结果集中的哪个列，或列的计算结果
+    order by :按照什么样的顺序来查看返回的数据
+    limit：限制查询结果返回的数量
+
+> + on与where的用法区别
+
+    on后面的筛选条件主要是针对的是关联表【而对于主表刷选条件不适用】。
+    如果是想再连接完毕后才筛选就应把条件放置于where后面。对于关联表我们要区分对待。如果是要条件查询后才连接应该把查询件放置于on后。
+    对于主表的筛选条件应放在where后面，不应该放在on后面
+
+> + having和where的用法区别
+
+    having只能用在group by之后，对分组后的结果进行筛选(即使用having的前提条件是分组)。
+    where肯定在group by 之前，即也在having之前。
+    where后的条件表达式里不允许使用聚合函数，而having可以。
+
+> + count用法
+
+    使用count（列名）当某列出现null值的时候，count（*）仍然会计算，但是count(列名)不会。
+
+
