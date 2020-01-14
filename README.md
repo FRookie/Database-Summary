@@ -215,4 +215,7 @@ MyISAM支持并发插入：读的时候插入，但是插入的数据当前事�
 
     使用count（列名）当某列出现null值的时候，count（*）仍然会计算，但是count(列名)不会。
 
+## Explain查看SQL执行计划
 
+| id | select_type | table | possible_keys | key | key_len | ref | rows | Extra |
+| :...: | :...: | :...: | :...: | :...: | :...: | :...: | :...: | :...: |
