@@ -327,3 +327,10 @@ select 查询的序列号，包含一组数字，表示查询中执行select子�
 
 >>　where子句的值总是false，不能用来获取任何元祖 
 
+> select tables optimized away
+
+>> 在没有group by子句的情况下，基于索引优化MIN/MAX操作或者对于MyISAM存储引擎优化COUNT（*  操作，不必等到执行阶段在进行计算，查询执行计划生成的阶段即可完成优化
+
+> distinct
+
+>> 优化distinct操作，在找到第一个匹配的元祖后即停止找同样值得动作
